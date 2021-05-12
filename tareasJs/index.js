@@ -1,15 +1,42 @@
-const fs= require('fs');
+const fs=require('fs');
 
-const tareasJSON = JSON.parse(fs.readFileSync('./tareasJSON/tareas.json', 'utf-8')); //bueno a tener en cuenta los parentesis
+ try {
+    const listaTareas=JSON.parse(fs.readFileSync('./tareasJSON/tareas.json','utf-8'));
+  
+    module.exports= tareas ={
 
-const tareas={
         listar: function(){
-            tareasJSON.forEach(elemento =>
-                console.log(`Tarea: ${elemento.título}, estado: ${elemento.estado}`)
-                
-            )
-        }
-};
+            tareas.leerJSON().forEach((elemento, i) => 
+                console.log(`${i+1}) Tarea: ${elemento.título},\n   estado: ${elemento.estado}`)
+            );
+        },
+        
+        listarFiltrados:function(array){
+            array.forEach(elemento => console.log(elemento));
 
-module.exports = tareas;
+        },
+
+        escribirJSON: function(array){
+            fs.writeFileSync('./tareasJSON/tareas.json', JSON.stringify(array, null, 2), 'utf-8');
+        },
+
+        guardarTarea: function(objTarea){
+            const modificacion=tareas.leerJSON();
+            modificacion.push(objTarea);
+            tareas.escribirJSON(modificacion); 
+        },
+
+        leerJSON: function(){
+            return listaTareas;
+        },
+
+        leerPorEstado: function(estado){
+            return tareas.leerJSON().filter(elemento=>elemento.estado === estado)
+        }
+    }
+
+    
+} catch (error) {
+    console.log("JSON NO encontrado!!!");
+}
 
